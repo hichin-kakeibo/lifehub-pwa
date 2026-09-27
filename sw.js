@@ -1,11 +1,8 @@
-const CACHE_NAME = 'lifehub-shell-v6';
+const CACHE_NAME = 'lifehub-shell-v7';
 const APP_ROOT = '/lifehub-pwa/';
 const INDEX_URL = '/lifehub-pwa/index.html';
 
 const SHELL = [
-  APP_ROOT,
-  INDEX_URL,
-  '/lifehub-pwa/threads.html',
   '/lifehub-pwa/manifest.webmanifest',
   '/lifehub-pwa/icon-192.png',
   '/lifehub-pwa/icon-512.png',
@@ -39,9 +36,13 @@ self.addEventListener('fetch', event => {
 
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
-        .then(response => response.ok ? response : caches.match(INDEX_URL))
-        .catch(() => caches.match(INDEX_URL))
+      fetch(event.request, { cache: 'no-store' })
+        .catch(() => {
+          if (url.pathname.endsWith('/threads.html')) {
+            return caches.match('/lifehub-pwa/threads.html');
+          }
+          return caches.match(INDEX_URL);
+        })
     );
     return;
   }
