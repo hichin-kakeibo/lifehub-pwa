@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<key>FullScreen</key>
+			<true/>
+			<key>Icon</key>
+			<data>
+			iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD6ElE
+			QVR4nO3dTY4TVxSGYROBYCdMEJlFYR+JQOwAwYDsIjCge9ATsoBM
+			MkjEQhBTVsJPJhm0VCp1++uU7b73nrKfZ0j/qHz69aly27jvfP/6
+			ZQPb/DD6AKhLHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRB
+			JA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiI7o4+
+			gJ3du/9g9CHs799vX0cfwg7WEceqg5ib35D6oZSO42ia2Gq6dWUr
+			qRjHcTdxXdlKyl2QnloZc9Vue6HNUW00Q1wOocgKqbI5lDFXZBrj
+			N0eRQVRTYYUM3hzKuNnY+YyMQxlLDJzSsDiUsdyoWY255lDGZrP5
+			/Nef1//x4a/Pt37yvfsP+l9/3On/DsbK2JrFXEqkcx+9TyvK+N8y
+			bvicztPrvTlOOY4lWVxxfYX0XB5dN8cpl3Fbes6wXxwnXsYeayN9
+			VbdJVvn1+XHbr4zDv/ZAneI48bVx6/rMs0ccJ17G4Xf9UScXpxUi
+			cRA1j+PEzylNtZ6tzUEkDqK2cTintNZ0wjZHc+kp1p7fYT/iIBJH
+			D4fc9UetjU3TOFxwzO33M17yVe3mbHMQNXyxj82x1cKnWnbaNI1e
+			AWRz9Lbkpz7wOmPO5hhmp1ef36zR5hDHMXBaoTdxEImDSBxE4iAS
+			B5E4iMRBJA4icRCJg0gcROIgEgeROIjGv731rt69+f3DP39v/dCr
+			17/98vTZwO/86ePH1y9fbP3Qo8c/Xrz/Y+9jG8LmIBIHkTiIxEEk
+			DiJxEImDSBxE4iASB5E4iMRBJA6i9T0rO8TF+dnF+dnoo+jN5iAS
+			B5E4iMRBJA4ij1YWOfw1pGtkcxCJg0gcROIgEgeROIjEQSQOoqP6
+			JdiuT6y/PTv/6ecn7Y5n7WwOInEQiYNIHETiIPJnvI6BP+NFb+Ig
+			EgeROIjEQSQOooZxNHp8xRXt5mxzEImDSBxEbeNw2dFa0wnbHETi
+			IGoehzNLO61na3MQiYOoRxzOLC10mGqnzaGP29Vnnk4rRP3isDxu
+			S7dJdt0c+jhczxk6rRD1jsPyOETn6Q3YHPrYT/+5jTmt6GNXQyY2
+			7JpDH8uNmtXIC1J9LDFwSoMfrejjZmPnM/5tny5vv/91fUWFu02V
+			33NUmEUdRaYxfnNMrJBNmSwuVdkck1LT6azabS+0OSbTjE5ki1Rr
+			YlIxjslxV1K2iUnpOCbzOa46lPpBzK0jjrl1zXfVyl2QUoc4iMRB
+			JA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEk
+			DiJxEImDSBxE4iASB5E4iMRBJA6i/wBnQv+vU3jU4gAAAABJRU5E
+			rkJggg==
+			</data>
+			<key>IgnoreManifestScope</key>
+			<true/>
+			<key>IsRemovable</key>
+			<true/>
+			<key>Label</key>
+			<string>Life Hub</string>
+			<key>Precomposed</key>
+			<true/>
+			<key>URL</key>
+			<string>https://script.google.com/macros/s/AKfycbz0w5PVLXCBEXDfdo4aLvwT1vlLmrLMKPkXiRW3ppRd55ANnpOfEQgkLLU7YinTRg0J/exec</string>
+			<key>PayloadDisplayName</key>
+			<string>Life Hub</string>
+			<key>PayloadIdentifier</key>
+			<string>jp.lifehub.webclip</string>
+			<key>PayloadType</key>
+			<string>com.apple.webClip.managed</string>
+			<key>PayloadUUID</key>
+			<string>559A4DC7-2713-4124-BD42-C5B94424BE2D</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>PayloadDescription</key>
+	<string>Life Hubをホーム画面からフルスクリーンで開くためのWeb Clipです。</string>
+	<key>PayloadDisplayName</key>
+	<string>Life Hub</string>
+	<key>PayloadIdentifier</key>
+	<string>jp.lifehub.profile</string>
+	<key>PayloadOrganization</key>
+	<string>Life Hub</string>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>C46FCA2C-9F93-4552-A2F4-43A0CD2AD2BB</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>
