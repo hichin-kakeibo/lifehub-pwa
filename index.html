@@ -114,12 +114,15 @@
     .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     .tool{
       background:#fff;
+      cursor:pointer;
+      transition:transform .14s ease;
       border:1px solid var(--border);
       border-radius:18px;
       padding:15px 10px;
       text-align:center;
       box-shadow:var(--shadow);
     }
+    .tool:active{transform:scale(.985)}
     .tool strong{display:block;font-size:13px;margin-top:8px}
     .tool small{display:block;color:var(--muted);font-size:10px;margin-top:4px;line-height:1.4}
     .state{
@@ -207,7 +210,7 @@
           <small class="detail" id="threads-detail">—</small>
         </article>
 
-        <article class="card" id="budget-card">
+        <article class="card pressable" id="budget-card" role="link" tabindex="0">
           <span class="label" id="budget-label">今月の予算</span>
           <strong class="value" id="budget">—</strong>
           <small class="detail" id="budget-detail">—</small>
@@ -219,7 +222,7 @@
         <span>HICHI FP＋</span>
       </div>
 
-      <section class="card fp">
+      <section class="card fp pressable" id="fp-card" role="link" tabindex="0">
         <span class="label">FPステータス</span>
         <strong class="value" id="fp-status">—</strong>
         <p id="fp-comment">—</p>
@@ -237,7 +240,27 @@
   <script>
     const API = 'https://script.google.com/macros/s/AKfycbz0w5PVLXCBEXDfdo4aLvwT1vlLmrLMKPkXiRW3ppRd55ANnpOfEQgkLLU7YinTRg0J/exec';
     const fmt = n => Math.round(Number(n) || 0).toLocaleString('ja-JP') + '円';
+    const GAS_APP = API;
     let timeoutId = null;
+
+    function toGasUrl(href) {
+      const value = String(href || '').trim();
+      if (!value) return '';
+      if (/^https?:\/\//i.test(value)) return value;
+      if (value.startsWith('?')) return GAS_APP + value;
+      return GAS_APP + (value.startsWith('/') ? value : '?' + value);
+    }
+
+    function openExternal(url) {
+      if (!url) return;
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
 
     function finishBoot() {
       const boot = document.getElementById('boot');
@@ -320,6 +343,20 @@
           subtitle.textContent = m.subtitle || '';
 
           item.append(icon, title, subtitle);
+
+          const href = toGasUrl(m.href);
+          if (href) {
+            item.setAttribute('role', 'link');
+            item.tabIndex = 0;
+            item.addEventListener('click', () => openExternal(href));
+            item.addEventListener('keydown', event => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openExternal(href);
+              }
+            });
+          }
+
           tools.appendChild(item);
         });
 
@@ -356,14 +393,35 @@
     document.getElementById('refresh').addEventListener('click', loadHome);
 
     const threadsCard = document.getElementById('threads-card');
+    const budgetCard = document.getElementById('budget-card');
+    const fpCard = document.getElementById('fp-card');
+
     const openThreads = () => {
       window.location.href = '/lifehub-pwa/threads.html';
     };
+    const openBudget = () => openExternal(GAS_APP + '?page=budget');
+    const openFp = () => openExternal(GAS_APP + '?page=fp');
     threadsCard.addEventListener('click', openThreads);
     threadsCard.addEventListener('keydown', event => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         openThreads();
+      }
+    });
+
+    budgetCard.addEventListener('click', openBudget);
+    budgetCard.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openBudget();
+      }
+    });
+
+    fpCard.addEventListener('click', openFp);
+    fpCard.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openFp();
       }
     });
 
