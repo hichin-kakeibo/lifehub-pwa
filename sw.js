@@ -1,11 +1,14 @@
-const CACHE_NAME = 'lifehub-shell-v1';
+const CACHE_NAME = 'lifehub-shell-v2';
+const APP_ROOT = '/lifehub-pwa/';
+const INDEX_URL = '/lifehub-pwa/index.html';
+
 const SHELL = [
-  './',
-  './index.html',
-  './manifest.webmanifest',
-  './icon-192.png',
-  './icon-512.png',
-  './apple-touch-icon.png'
+  APP_ROOT,
+  INDEX_URL,
+  '/lifehub-pwa/manifest.webmanifest',
+  '/lifehub-pwa/icon-192.png',
+  '/lifehub-pwa/icon-512.png',
+  '/lifehub-pwa/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', event => {
@@ -28,7 +31,9 @@ self.addEventListener('fetch', event => {
 
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('./index.html'))
+      fetch(event.request)
+        .then(response => response.ok ? response : caches.match(INDEX_URL))
+        .catch(() => caches.match(INDEX_URL))
     );
     return;
   }
