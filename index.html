@@ -98,6 +98,11 @@
       box-shadow:var(--shadow);
       min-height:122px;
     }
+    .card.pressable{
+      cursor:pointer;
+      transition:transform .14s ease, box-shadow .14s ease;
+    }
+    .card.pressable:active{transform:scale(.985)}
     .label{font-size:12px;color:var(--muted);display:block;margin-bottom:14px}
     .value{font-size:23px;font-weight:750;letter-spacing:-.03em;display:block}
     .detail{font-size:11px;color:var(--muted);display:block;margin-top:7px;line-height:1.4}
@@ -196,7 +201,7 @@
       </div>
 
       <section class="grid">
-        <article class="card">
+        <article class="card pressable" id="threads-card" role="link" tabindex="0">
           <span class="label">今日の投稿</span>
           <strong class="value" id="threads">—</strong>
           <small class="detail" id="threads-detail">—</small>
@@ -349,6 +354,19 @@
     }
 
     document.getElementById('refresh').addEventListener('click', loadHome);
+
+    const threadsCard = document.getElementById('threads-card');
+    const openThreads = () => {
+      window.location.href = '/lifehub-pwa/threads.html';
+    };
+    threadsCard.addEventListener('click', openThreads);
+    threadsCard.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openThreads();
+      }
+    });
+
     loadHome();
 
     if ('serviceWorker' in navigator) {
