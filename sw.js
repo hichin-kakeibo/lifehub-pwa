@@ -1,10 +1,11 @@
-const CACHE_NAME = 'lifehub-shell-v4';
+const CACHE_NAME = 'lifehub-shell-v5';
 const APP_ROOT = '/lifehub-pwa/';
 const INDEX_URL = '/lifehub-pwa/index.html';
 
 const SHELL = [
   APP_ROOT,
   INDEX_URL,
+  '/lifehub-pwa/threads.html',
   '/lifehub-pwa/manifest.webmanifest',
   '/lifehub-pwa/icon-192.png',
   '/lifehub-pwa/icon-512.png',
