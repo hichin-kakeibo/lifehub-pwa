@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lifehub-shell-v3';
+const CACHE_NAME = 'lifehub-shell-v4';
 const APP_ROOT = '/lifehub-pwa/';
 const INDEX_URL = '/lifehub-pwa/index.html';
 
