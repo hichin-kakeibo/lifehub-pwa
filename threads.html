@@ -225,10 +225,10 @@ function createThreadCard(post){
 }
 async function postThreadStatus(id,status){
   const response=await jsonp('v1/threads/status',{id,status});
-  if(!response||!response.ok){
+  if(!response||response.ok===false||response.error){
     throw new Error(response?.error?.message||'更新できませんでした');
   }
-  return response;
+  return response.data||response;
 }
 
 async function updateThreadStatus(post,button,targetStatus){
