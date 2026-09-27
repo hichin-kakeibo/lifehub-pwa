@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FAF8F7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Life Hub">
+  <title>Threads | Life Hub</title>
+  <link rel="manifest" href="/lifehub-pwa/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/lifehub-pwa/apple-touch-icon.png">
+  <style>
+    :root{
+      --primary:#D8AAA5; --primary-strong:#9F7470; --primary-soft:rgba(216,170,165,.16);
+      --background:#FAF8F7; --card:#fff; --text:#3F3836; --muted:#998B87;
+      --border:rgba(153,139,135,.14); --danger:#A06561; --success:#6E8174;
+      --shadow:0 12px 36px rgba(63,56,54,.055); --radius:22px;
+      --safe-top:env(safe-area-inset-top,0px); --safe-bottom:env(safe-area-inset-bottom,0px);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--background);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Hiragino Sans","Yu Gothic",sans-serif}
+    body{min-height:100svh;padding:calc(14px + var(--safe-top)) 14px calc(86px + var(--safe-bottom))}
+    button{font:inherit}
+    .shell{width:min(100%,720px);margin:0 auto}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .back,.round{width:42px;height:42px;border:0;border-radius:14px;background:#fff;box-shadow:var(--shadow);color:var(--text);font-size:20px}
+    .head-copy{flex:1}.head-copy strong{display:block;font-size:18px}.head-copy small{display:block;color:var(--muted);margin-top:2px}
+    .date-switcher{display:grid;grid-template-columns:42px 1fr 42px;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:22px;padding:12px;margin-bottom:14px;box-shadow:var(--shadow)}
+    .date-copy{text-align:center}.date-copy span{display:block;color:var(--muted);font-size:10px;letter-spacing:.12em}.date-copy strong{display:block;margin-top:4px;font-size:16px}
+    .state{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:var(--shadow);color:var(--muted);font-size:13px;line-height:1.7}
+    .alert{background:linear-gradient(145deg,#fff,#F8F2EF);border:1px solid var(--border);border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+    .alert .eyebrow{font-size:11px;color:var(--primary-strong);font-weight:700}.alert h2{font-size:17px;margin:8px 0}.alert p{font-size:13px;color:var(--muted);line-height:1.7;white-space:pre-wrap}
+    .post-list{display:grid;gap:14px}
+    .post-card{background:#fff;border:1px solid var(--border);border-radius:22px;padding:17px;box-shadow:var(--shadow)}
+    .post-header{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center}
+    .time-badge{width:42px;height:42px;border-radius:14px;background:var(--primary-soft);display:grid;place-items:center;font-size:20px}
+    .post-heading h2{font-size:17px;margin:0}.post-heading small{display:block;color:var(--muted);margin-top:3px}
+    .status-pill{font-size:10px;padding:6px 8px;border-radius:999px;background:#F3F0EF;color:var(--muted);white-space:nowrap}
+    .status-pill.ready{background:#EEF3EF;color:var(--success)}
+    .status-pill.posted{background:var(--primary-soft);color:var(--primary-strong)}
+    .recommendation{display:flex;gap:10px;align-items:center;margin:14px 0 10px}.stars{color:#B48A7F;letter-spacing:.08em}.score{font-size:11px;color:var(--muted)}
+    .post-copy{font-size:14px;line-height:1.8;white-space:pre-wrap;margin:0}.post-copy.is-empty{color:var(--muted)}
+    .metric-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--muted)}
+    .metric-row strong{color:var(--text)}
+    .post-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:15px}
+    .btn{border:0;border-radius:13px;padding:11px 10px;background:#F7F3F1;color:var(--text);font-weight:650;font-size:12px}
+    .btn:disabled{opacity:.4}
+    .btn.primary{background:var(--text);color:#fff;width:100%;margin-top:9px}
+    .btn.primary.posted{background:var(--primary-soft);color:var(--primary-strong)}
+    .bottom-nav{position:fixed;left:50%;bottom:calc(10px + var(--safe-bottom));transform:translateX(-50%);width:min(calc(100% - 20px),720px);display:grid;grid-template-columns:repeat(3,1fr);background:rgba(255,255,255,.96);border:1px solid var(--border);border-radius:20px;padding:6px;box-shadow:0 18px 48px rgba(63,56,54,.13);backdrop-filter:blur(18px)}
+    .nav{border:0;background:transparent;padding:10px 6px;border-radius:14px;color:var(--muted);font-size:11px}.nav.active{background:var(--primary-soft);color:var(--primary-strong);font-weight:700}
+    .toast{position:fixed;left:50%;bottom:calc(86px + var(--safe-bottom));transform:translate(-50%,20px);background:rgba(63,56,54,.94);color:#fff;padding:10px 14px;border-radius:12px;font-size:12px;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <button class="back" type="button" id="back" aria-label="戻る">‹</button>
+    <div class="head-copy"><strong>Threads</strong><small>今日の投稿</small></div>
+    <button class="round" type="button" id="refresh" aria-label="更新">↻</button>
+  </header>
+
+  <div class="date-switcher">
+    <button class="round" id="previous-date" type="button" aria-label="前日">‹</button>
+    <div class="date-copy"><span>POST PLAN</span><strong id="threads-date">読み込み中...</strong></div>
+    <button class="round" id="next-date" type="button" aria-label="翌日">›</button>
+  </div>
+
+  <section id="threads-character-area" class="hidden"></section>
+  <section id="threads-posts-area" class="post-list"><div class="state">投稿を読み込んでいます…</div></section>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav" type="button" data-href="/lifehub-pwa/">ホーム</button>
+  <button class="nav active" type="button">Threads</button>
+  <button class="nav" type="button" data-href="/lifehub-pwa/budget.html">家計簿</button>
+</nav>
+<div id="toast" class="toast"></div>
+
+<script>
+const API='https://script.google.com/macros/s/AKfycbz0w5PVLXCBEXDfdo4aLvwT1vlLmrLMKPkXiRW3ppRd55ANnpOfEQgkLLU7YinTRg0J/exec';
+let selectedDate=localDate(new Date());
+let callbackSeq=0;
+let toastTimer;
+
+function localDate(date){
+  return date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+}
+function stars(value){
+  const count=Math.max(0,Math.min(5,Number(value)||0));
+  return '★'.repeat(count)+'☆'.repeat(5-count);
+}
+function showToast(message){
+  const el=document.getElementById('toast');
+  clearTimeout(toastTimer); el.textContent=message; el.classList.add('show');
+  toastTimer=setTimeout(()=>el.classList.remove('show'),1800);
+}
+async function copyText(text){
+  if(!text)return;
+  try{
+    if(navigator.clipboard&&window.isSecureContext) await navigator.clipboard.writeText(text);
+    else fallbackCopy(text);
+    showToast('コピーしました');
+  }catch(e){fallbackCopy(text);showToast('コピーしました');}
+}
+function fallbackCopy(text){
+  const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';
+  document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();
+}
+function jsonp(route,params={}){
+  return new Promise((resolve,reject)=>{
+    const cb='lifeHubCb'+(++callbackSeq);
+    const script=document.createElement('script');
+    const url=new URL(API);
+    url.searchParams.set('api',route);
+    Object.entries(params).forEach(([k,v])=>{if(v!==undefined&&v!==null)url.searchParams.set(k,v)});
+    url.searchParams.set('callback',cb);
+    url.searchParams.set('_',Date.now());
+    const timeout=setTimeout(()=>{cleanup();reject(new Error('タイムアウトしました'));},10000);
+    function cleanup(){clearTimeout(timeout);delete window[cb];script.remove();}
+    window[cb]=(data)=>{cleanup();resolve(data)};
+    script.onerror=()=>{cleanup();reject(new Error('APIを読み込めませんでした'))};
+    script.src=url.toString();
+    document.head.appendChild(script);
+  });
+}
+async function loadThreads(){
+  const area=document.getElementById('threads-posts-area');
+  area.innerHTML='<div class="state">投稿を読み込んでいます…</div>';
+  try{
+    const response=await jsonp('v1/threads/dashboard',{date:selectedDate});
+    if(!response||!response.ok)throw new Error(response?.error?.message||'データを取得できませんでした');
+    renderThreads(response.data||{});
+  }catch(error){
+    area.innerHTML='<div class="state">読み込みエラー：'+escapeHtml(error.message||String(error))+'</div>';
+  }
+}
+function renderThreads(data){
+  document.getElementById('threads-date').textContent=data.displayDate||selectedDate;
+  renderCharacter(data.characterPost);
+  const area=document.getElementById('threads-posts-area');
+  area.replaceChildren(...(data.posts||[]).map(createThreadCard));
+}
+function renderCharacter(post){
+  const area=document.getElementById('threads-character-area');
+  area.replaceChildren();
+  if(!post){area.classList.add('hidden');return;}
+  area.classList.remove('hidden');
+  const card=document.createElement('article');card.className='alert';
+  const label=document.createElement('div');label.className='eyebrow';label.textContent='🔥 キャラ速報';
+  const title=document.createElement('h2');title.textContent=post.title||'';
+  const body=document.createElement('p');body.textContent=post.body||'';
+  const btn=document.createElement('button');btn.className='btn';btn.textContent='本文をコピー';btn.onclick=()=>copyText(post.body||'');
+  card.append(label,title,body,btn);area.appendChild(card);
+}
+function createThreadCard(post){
+  const card=document.createElement('article');card.className='post-card';card.dataset.id=post.id||'';
+  const header=document.createElement('div');header.className='post-header';
+  const badge=document.createElement('div');badge.className='time-badge';badge.textContent=post.time==='夜'?'☾':'☀';
+  const heading=document.createElement('div');heading.className='post-heading';
+  const title=document.createElement('h2');title.textContent=post.time||'投稿';
+  const category=document.createElement('small');category.textContent=post.category||(post.isEmpty?'投稿未登録':'Threads投稿');
+  heading.append(title,category);
+  const status=document.createElement('span');status.className='status-pill '+(post.status||'');
+  status.textContent=({draft:'下書き',ready:'準備OK',posted:'投稿済み'})[post.status]||post.status||'';
+  header.append(badge,heading,status);
+
+  const rec=document.createElement('div');rec.className='recommendation';
+  const s=document.createElement('span');s.className='stars';s.textContent=stars(post.recommendation);
+  const score=document.createElement('span');score.className='score';score.textContent=post.isEmpty?'おすすめ度 —':'おすすめ度 '+(post.score??'—');
+  rec.append(s,score);
+
+  const copy=document.createElement('p');copy.className='post-copy'+(post.isEmpty?' is-empty':'');
+  copy.textContent=post.body||'スプレッドシートに投稿を登録してください。';
+
+  const metrics=createMetrics(post.metrics||{});
+  const actions=document.createElement('div');actions.className='post-actions';
+
+  let productUrl='';
+  try{
+    const candidate=post.affiliate||post.url||'';
+    const u=new URL(candidate);
+    if(u.protocol==='https:')productUrl=u.href;
+  }catch(e){}
+
+  const view=button('商品を見る',!productUrl);
+  if(productUrl)view.onclick=()=>window.open(productUrl,'_blank','noopener,noreferrer');
+  const b1=button('本文コピー',!post.body);if(post.body)b1.onclick=()=>copyText(post.body);
+  const b2=button('返信コピー',!post.reply);if(post.reply)b2.onclick=()=>copyText(post.reply);
+  const link=post.affiliate||post.url||'';const b3=button('リンクコピー',!link);if(link)b3.onclick=()=>copyText(link);
+  actions.append(view,b1,b2,b3);
+
+  const posted=button(post.status==='posted'?'投稿済み':'投稿済みにする',Boolean(post.isEmpty));
+  posted.classList.add('primary');
+  if(post.status==='posted')posted.classList.add('posted');
+  posted.title='書き込み機能は次の段階で接続します';
+  posted.onclick=()=>showToast('投稿状態の変更は次に接続します');
+
+  card.append(header,rec,copy);
+  if(metrics)card.append(metrics);
+  card.append(actions,posted);
+  return card;
+}
+function createMetrics(metrics){
+  const values=[['表示',metrics.views],['クリック',metrics.clicks],['売上',metrics.sales]];
+  if(!values.some(x=>x[1]!==null&&x[1]!==undefined))return null;
+  const row=document.createElement('div');row.className='metric-row';
+  values.forEach(([label,val])=>{const span=document.createElement('span');span.textContent=label+' ';const strong=document.createElement('strong');strong.textContent=val==null?'—':Number(val).toLocaleString('ja-JP');span.append(strong);row.append(span)});
+  return row;
+}
+function button(label,disabled=false){const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=label;b.disabled=disabled;return b}
+function changeDate(days){const d=new Date(selectedDate+'T12:00:00');d.setDate(d.getDate()+days);selectedDate=localDate(d);loadThreads()}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+document.getElementById('back').onclick=()=>location.href='/lifehub-pwa/';
+document.getElementById('refresh').onclick=loadThreads;
+document.getElementById('previous-date').onclick=()=>changeDate(-1);
+document.getElementById('next-date').onclick=()=>changeDate(1);
+document.querySelectorAll('[data-href]').forEach(b=>b.onclick=()=>location.href=b.dataset.href);
+loadThreads();
+</script>
+</body>
+</html>
