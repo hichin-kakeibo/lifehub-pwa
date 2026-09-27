@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Life Hub">
   <title>Life Hub</title>
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="manifest" href="/lifehub-pwa/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/lifehub-pwa/apple-touch-icon.png">
   <style>
     :root { --bg:#FAF8F7; --ink:#3F3836; --muted:#998B87; --accent:#D8AAA5; }
     * { box-sizing:border-box; }
@@ -47,7 +47,7 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+        navigator.serviceWorker.register('/lifehub-pwa/sw.js', { scope: '/lifehub-pwa/' }).catch(() => {});
       });
     }
   </script>
