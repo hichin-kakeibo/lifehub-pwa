@@ -124,6 +124,37 @@
     }
     .tool:active{transform:scale(.985)}
     .tool strong{display:block;font-size:13px;margin-top:8px}
+
+    .shortcuts{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:8px;
+      margin:4px 0 22px;
+    }
+    .shortcut{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:17px;
+      padding:12px 6px 10px;
+      box-shadow:var(--shadow);
+      color:var(--text);
+      text-align:center;
+      cursor:pointer;
+      transition:transform .14s ease;
+    }
+    .shortcut:active{transform:scale(.97)}
+    .shortcut-icon{
+      display:block;
+      font-size:20px;
+      line-height:1;
+      margin-bottom:7px;
+    }
+    .shortcut-label{
+      display:block;
+      font-size:10px;
+      font-weight:700;
+      white-space:nowrap;
+    }
     .tool small{display:block;color:var(--muted);font-size:10px;margin-top:4px;line-height:1.4}
     .state{
       background:#fff;
@@ -164,6 +195,9 @@
       .tools{grid-template-columns:1fr}
       .grid{gap:10px}
       .card{padding:14px}
+      .shortcuts{grid-template-columns:repeat(5,1fr);gap:6px}
+      .shortcut{padding:10px 3px 9px}
+      .shortcut-label{font-size:9px}
     }
   </style>
 </head>
@@ -196,6 +230,29 @@
         <p class="eyebrow" id="date">LIFE HUB</p>
         <h1 id="greeting">こんにちは</h1>
         <p>今日やることを、ここから。</p>
+      </section>
+
+      <section class="shortcuts" aria-label="Life Hub メニュー">
+        <button class="shortcut" type="button" id="shortcut-threads">
+          <span class="shortcut-icon">◉</span>
+          <span class="shortcut-label">Threads</span>
+        </button>
+        <button class="shortcut" type="button" id="shortcut-budget">
+          <span class="shortcut-icon">¥</span>
+          <span class="shortcut-label">家計簿</span>
+        </button>
+        <button class="shortcut" type="button" id="shortcut-fp">
+          <span class="shortcut-icon">＋</span>
+          <span class="shortcut-label">FP</span>
+        </button>
+        <button class="shortcut" type="button" id="shortcut-shopping">
+          <span class="shortcut-icon">🛒</span>
+          <span class="shortcut-label">買い物</span>
+        </button>
+        <button class="shortcut" type="button" id="shortcut-todo">
+          <span class="shortcut-icon">✓</span>
+          <span class="shortcut-label">Todo</span>
+        </button>
       </section>
 
       <div class="heading">
@@ -408,6 +465,12 @@
         openThreads();
       }
     });
+
+    document.getElementById('shortcut-threads').addEventListener('click', openThreads);
+    document.getElementById('shortcut-budget').addEventListener('click', openBudget);
+    document.getElementById('shortcut-fp').addEventListener('click', openFp);
+    document.getElementById('shortcut-shopping').addEventListener('click', () => openExternal(GAS_APP + '?page=shopping'));
+    document.getElementById('shortcut-todo').addEventListener('click', () => openExternal(GAS_APP + '?page=todo'));
 
     budgetCard.addEventListener('click', openBudget);
     budgetCard.addEventListener('keydown', event => {
