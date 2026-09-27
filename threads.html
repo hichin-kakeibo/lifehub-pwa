@@ -121,6 +121,10 @@ function fallbackCopy(text){
   const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';
   document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();
 }
+function sleep(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
 function jsonp(route,params={}){
   return new Promise((resolve,reject)=>{
     const cb='lifeHubCb'+(++callbackSeq);
@@ -138,13 +142,17 @@ function jsonp(route,params={}){
     document.head.appendChild(script);
   });
 }
+async function getThreadsData(){
+  const response=await jsonp('v1/threads/dashboard',{date:selectedDate});
+  if(!response||!response.ok)throw new Error(response?.error?.message||'データを取得できませんでした');
+  return response.data||{};
+}
+
 async function loadThreads(){
   const area=document.getElementById('threads-posts-area');
   area.innerHTML='<div class="state">投稿を読み込んでいます…</div>';
   try{
-    const response=await jsonp('v1/threads/dashboard',{date:selectedDate});
-    if(!response||!response.ok)throw new Error(response?.error?.message||'データを取得できませんでした');
-    renderThreads(response.data||{});
+    renderThreads(await getThreadsData());
   }catch(error){
     area.innerHTML='<div class="state">読み込みエラー：'+escapeHtml(error.message||String(error))+'</div>';
   }
@@ -204,17 +212,65 @@ function createThreadCard(post){
   const link=post.affiliate||post.url||'';const b3=button('リンクコピー',!link);if(link)b3.onclick=()=>copyText(link);
   actions.append(view,b1,b2,b3);
 
+  const nextStatus=post.status==='posted'?'ready':'posted';
   const posted=button(post.status==='posted'?'投稿済み':'投稿済みにする',Boolean(post.isEmpty));
   posted.classList.add('primary');
   if(post.status==='posted')posted.classList.add('posted');
-  posted.title='書き込み機能は次の段階で接続します';
-  posted.onclick=()=>showToast('投稿状態の変更は次に接続します');
+  posted.onclick=()=>updateThreadStatus(post,posted,nextStatus);
 
   card.append(header,rec,copy);
   if(metrics)card.append(metrics);
   card.append(actions,posted);
   return card;
 }
+async function postThreadStatus(id,status){
+  const payload={
+    route:'v1/threads/status',
+    id:id,
+    status:status
+  };
+
+  await fetch(API,{
+    method:'POST',
+    mode:'no-cors',
+    cache:'no-store',
+    headers:{'Content-Type':'text/plain;charset=UTF-8'},
+    body:JSON.stringify(payload)
+  });
+}
+
+async function updateThreadStatus(post,button,targetStatus){
+  const originalLabel=button.textContent;
+  button.disabled=true;
+  button.textContent='更新中…';
+
+  try{
+    await postThreadStatus(post.id,targetStatus);
+
+    let latest=null;
+    let matched=null;
+
+    for(let attempt=0;attempt<4;attempt++){
+      await sleep(attempt===0?650:500);
+      latest=await getThreadsData();
+      matched=(latest.posts||[]).find(item=>String(item.id)===String(post.id));
+
+      if(matched&&matched.status===targetStatus)break;
+    }
+
+    if(!matched||matched.status!==targetStatus){
+      throw new Error('更新結果を確認できませんでした');
+    }
+
+    renderThreads(latest);
+    showToast(targetStatus==='posted'?'投稿済みにしました':'投稿前に戻しました');
+  }catch(error){
+    button.disabled=false;
+    button.textContent=originalLabel;
+    showToast(error.message||'更新できませんでした');
+  }
+}
+
 function createMetrics(metrics){
   const values=[['表示',metrics.views],['クリック',metrics.clicks],['売上',metrics.sales]];
   if(!values.some(x=>x[1]!==null&&x[1]!==undefined))return null;
