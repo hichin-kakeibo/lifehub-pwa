@@ -4,7 +4,7 @@
   "short_name": "Life Hub",
   "description": "暮らし・Threads・家計簿・FPをまとめるLife Hub",
   "lang": "ja",
-  "start_url": "/lifehub-pwa/",
+  "start_url": "/lifehub-pwa/?v=7",
   "scope": "/lifehub-pwa/",
   "display": "standalone",
   "background_color": "#FAF8F7",
