@@ -11,39 +11,345 @@
   <link rel="manifest" href="/lifehub-pwa/manifest.webmanifest">
   <link rel="apple-touch-icon" href="/lifehub-pwa/apple-touch-icon.png">
   <style>
-    :root { --bg:#FAF8F7; --ink:#3F3836; --muted:#998B87; --accent:#D8AAA5; }
-    * { box-sizing:border-box; }
-    html,body { margin:0; width:100%; height:100%; overflow:hidden; background:var(--bg); }
-    body { font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Hiragino Sans","Yu Gothic",sans-serif; }
-    #lifehub-frame { position:fixed; inset:0; width:100%; height:100%; border:0; background:var(--bg); }
-    #boot { position:fixed; inset:0; z-index:2; display:grid; place-items:center; background:var(--bg); color:var(--muted); transition:opacity .18s ease; }
-    #boot.hidden { opacity:0; pointer-events:none; }
-    .boot-card { text-align:center; padding:24px; }
-    .mark { width:52px; height:52px; margin:0 auto 13px; display:grid; place-items:center; border-radius:17px; background:#fff; color:var(--ink); box-shadow:0 12px 36px rgba(63,56,54,.055); font-weight:700; letter-spacing:-.04em; }
-    .boot-title { font-size:15px; font-weight:600; color:var(--ink); }
-    .boot-sub { margin-top:6px; font-size:10px; }
+    :root{
+      --primary:#D8AAA5;
+      --primary-strong:#9F7470;
+      --primary-soft:rgba(216,170,165,.16);
+      --background:#FAF8F7;
+      --card:#FFFFFF;
+      --text:#3F3836;
+      --muted:#998B87;
+      --danger:#A06561;
+      --danger-soft:#F7ECEA;
+      --border:rgba(153,139,135,.14);
+      --shadow:0 12px 36px rgba(63,56,54,.055);
+      --radius:22px;
+      --safe-top:env(safe-area-inset-top,0px);
+      --safe-bottom:env(safe-area-inset-bottom,0px);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      min-height:100%;
+      background:var(--background);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Hiragino Sans","Yu Gothic",sans-serif;
+    }
+    body{
+      min-height:100svh;
+      padding:calc(16px + var(--safe-top)) 16px calc(28px + var(--safe-bottom));
+    }
+    button{font:inherit}
+    .shell{width:min(100%,720px);margin:0 auto}
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+    }
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand img{
+      width:42px;
+      height:42px;
+      border-radius:13px;
+      box-shadow:var(--shadow);
+    }
+    .brand strong{display:block;font-size:17px}
+    .brand small{display:block;color:var(--muted);margin-top:2px}
+    .refresh{
+      border:0;
+      background:var(--primary-soft);
+      color:var(--primary-strong);
+      font-weight:700;
+      border-radius:999px;
+      padding:8px 12px;
+    }
+    .welcome{
+      background:linear-gradient(145deg,#fff,#F8F2EF);
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      margin-bottom:24px;
+    }
+    .eyebrow{
+      margin:0 0 8px;
+      color:var(--primary-strong);
+      font-weight:700;
+      font-size:11px;
+      letter-spacing:.12em;
+    }
+    h1{font-size:27px;line-height:1.2;margin:0 0 8px}
+    .welcome p:last-child{margin:0;color:var(--muted);font-size:14px}
+    .heading{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      margin:20px 2px 10px;
+    }
+    .heading h2{margin:0;font-size:18px}
+    .heading span{font-size:11px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:var(--shadow);
+      min-height:122px;
+    }
+    .label{font-size:12px;color:var(--muted);display:block;margin-bottom:14px}
+    .value{font-size:23px;font-weight:750;letter-spacing:-.03em;display:block}
+    .detail{font-size:11px;color:var(--muted);display:block;margin-top:7px;line-height:1.4}
+    .card.danger{background:var(--danger-soft)}
+    .card.danger .value{color:var(--danger)}
+    .fp{min-height:auto}
+    .fp .value{font-size:18px}
+    .fp p{margin:8px 0 0;color:var(--muted);font-size:12px;line-height:1.7}
+    .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .tool{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:15px 10px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+    .tool strong{display:block;font-size:13px;margin-top:8px}
+    .tool small{display:block;color:var(--muted);font-size:10px;margin-top:4px;line-height:1.4}
+    .state{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+    }
+    .hidden{display:none!important}
+    .boot{
+      position:fixed;
+      inset:0;
+      z-index:999;
+      display:grid;
+      place-items:center;
+      background:var(--background);
+      transition:opacity .2s ease;
+    }
+    .boot.hidden{opacity:0;pointer-events:none}
+    .boot-inner{text-align:center}
+    .boot-mark{
+      width:58px;
+      height:58px;
+      margin:0 auto 13px;
+      border-radius:18px;
+      background:#fff;
+      display:grid;
+      place-items:center;
+      font-weight:800;
+      box-shadow:var(--shadow);
+    }
+    .boot-title{font-weight:700}
+    .boot-sub{font-size:11px;color:var(--muted);margin-top:5px}
+    @media(max-width:390px){
+      .tools{grid-template-columns:1fr}
+      .grid{gap:10px}
+      .card{padding:14px}
+    }
   </style>
 </head>
 <body>
-  <div id="boot" aria-live="polite">
-    <div class="boot-card">
-      <div class="mark">LH</div>
+  <div id="boot" class="boot">
+    <div class="boot-inner">
+      <div class="boot-mark">LH</div>
       <div class="boot-title">Life Hub</div>
       <div class="boot-sub">暮らしを読み込んでいます</div>
     </div>
   </div>
 
-  <iframe
-    id="lifehub-frame"
-    title="Life Hub"
-    src="https://script.google.com/macros/s/AKfycbz0w5PVLXCBEXDfdo4aLvwT1vlLmrLMKPkXiRW3ppRd55ANnpOfEQgkLLU7YinTRg0J/exec?page=home">
-  </iframe>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <img src="/lifehub-pwa/apple-touch-icon.png" alt="">
+        <div>
+          <strong>Life Hub</strong>
+          <small>今日の暮らし</small>
+        </div>
+      </div>
+      <button class="refresh" id="refresh" type="button">更新</button>
+    </header>
+
+    <div id="loading" class="state">Life Hubのデータを読み込んでいます…</div>
+    <div id="error" class="state hidden"></div>
+
+    <main id="content" class="hidden">
+      <section class="welcome">
+        <p class="eyebrow" id="date">LIFE HUB</p>
+        <h1 id="greeting">こんにちは</h1>
+        <p>今日やることを、ここから。</p>
+      </section>
+
+      <div class="heading">
+        <h2>今日</h2>
+        <span>暮らしの現在地</span>
+      </div>
+
+      <section class="grid">
+        <article class="card">
+          <span class="label">今日の投稿</span>
+          <strong class="value" id="threads">—</strong>
+          <small class="detail" id="threads-detail">—</small>
+        </article>
+
+        <article class="card" id="budget-card">
+          <span class="label" id="budget-label">今月の予算</span>
+          <strong class="value" id="budget">—</strong>
+          <small class="detail" id="budget-detail">—</small>
+        </article>
+      </section>
+
+      <div class="heading">
+        <h2>お金</h2>
+        <span>HICHI FP＋</span>
+      </div>
+
+      <section class="card fp">
+        <span class="label">FPステータス</span>
+        <strong class="value" id="fp-status">—</strong>
+        <p id="fp-comment">—</p>
+      </section>
+
+      <div class="heading">
+        <h2>便利ツール</h2>
+        <span>Life Hub</span>
+      </div>
+
+      <section class="tools" id="tools"></section>
+    </main>
+  </div>
 
   <script>
-    const frame = document.getElementById('lifehub-frame');
-    const boot = document.getElementById('boot');
-    frame.addEventListener('load', () => boot.classList.add('hidden'));
-    setTimeout(() => boot.classList.add('hidden'), 5000);
+    const API = 'https://script.google.com/macros/s/AKfycbz0w5PVLXCBEXDfdo4aLvwT1vlLmrLMKPkXiRW3ppRd55ANnpOfEQgkLLU7YinTRg0J/exec';
+    const fmt = n => Math.round(Number(n) || 0).toLocaleString('ja-JP') + '円';
+    let timeoutId = null;
+
+    function finishBoot() {
+      const boot = document.getElementById('boot');
+      if (!boot) return;
+      boot.classList.add('hidden');
+      setTimeout(() => boot.remove(), 250);
+    }
+
+    function showError(message) {
+      clearTimeout(timeoutId);
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('content').classList.add('hidden');
+      const el = document.getElementById('error');
+      el.textContent = '接続できませんでした：' + message;
+      el.classList.remove('hidden');
+      finishBoot();
+    }
+
+    function renderHome(response) {
+      try {
+        clearTimeout(timeoutId);
+
+        if (!response || !response.ok) {
+          throw new Error(response && response.error ? response.error.message : 'データを取得できませんでした。');
+        }
+
+        const d = response.data || {};
+
+        document.getElementById('date').textContent = (d.displayDate || '') + ' · LIFE HUB';
+        document.getElementById('greeting').textContent = d.greeting || 'こんにちは';
+
+        const th = d.threads || {};
+        document.getElementById('threads').textContent = (th.total ?? 0) + '件';
+        document.getElementById('threads-detail').textContent =
+          '準備OK ' + (th.ready ?? 0) + '件 · 投稿済み ' + (th.posted ?? 0) + '件';
+
+        const b = d.budget || {};
+        const remaining = b.remaining == null ? null : Number(b.remaining);
+        const today = b.today == null ? null : Number(b.today);
+        const bcard = document.getElementById('budget-card');
+        bcard.classList.remove('danger');
+
+        if (remaining == null || !Number.isFinite(remaining)) {
+          document.getElementById('budget-label').textContent = '今月の予算';
+          document.getElementById('budget').textContent = '—';
+          document.getElementById('budget-detail').textContent = '家計簿を確認';
+        } else if (remaining < 0) {
+          document.getElementById('budget-label').textContent = '予算オーバー';
+          document.getElementById('budget').textContent = fmt(Math.abs(remaining));
+          document.getElementById('budget-detail').textContent = '今月の支出を確認';
+          bcard.classList.add('danger');
+        } else {
+          document.getElementById('budget-label').textContent = 'あと使える';
+          document.getElementById('budget').textContent = fmt(remaining);
+          document.getElementById('budget-detail').textContent =
+            today != null && Number.isFinite(today) && today >= 0
+              ? '今日の目安 ' + fmt(today)
+              : '家計簿を確認';
+        }
+
+        const fp = d.fp || {};
+        document.getElementById('fp-status').textContent = fp.status || '—';
+        document.getElementById('fp-comment').textContent = fp.comment || '—';
+
+        const tools = document.getElementById('tools');
+        tools.replaceChildren();
+
+        (d.upcomingModules || []).forEach(m => {
+          const item = document.createElement('div');
+          item.className = 'tool';
+
+          const icon = document.createElement('div');
+          icon.style.fontSize = '22px';
+          icon.textContent = ({receipt:'🧾',cart:'🛒',checklist:'✓'}[m.icon] || '•');
+
+          const title = document.createElement('strong');
+          title.textContent = m.title || '';
+
+          const subtitle = document.createElement('small');
+          subtitle.textContent = m.subtitle || '';
+
+          item.append(icon, title, subtitle);
+          tools.appendChild(item);
+        });
+
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error').classList.add('hidden');
+        document.getElementById('content').classList.remove('hidden');
+
+        finishBoot();
+      } catch (e) {
+        showError(e.message || String(e));
+      }
+    }
+
+    window.lifeHubHomeCallback = renderHome;
+
+    function loadHome() {
+      document.getElementById('error').classList.add('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+      document.getElementById('content').classList.add('hidden');
+
+      const old = document.getElementById('lifehub-api-script');
+      if (old) old.remove();
+
+      const s = document.createElement('script');
+      s.id = 'lifehub-api-script';
+      s.src = API + '?api=v1/home/dashboard&callback=lifeHubHomeCallback&_=' + Date.now();
+      s.onerror = () => showError('GAS APIの読み込みに失敗しました。');
+      document.head.appendChild(s);
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => showError('タイムアウトしました。'), 10000);
+    }
+
+    document.getElementById('refresh').addEventListener('click', loadHome);
+    loadHome();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
