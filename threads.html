@@ -75,12 +75,24 @@
 <nav class="bottom-nav">
   <button class="nav" type="button" data-href="/lifehub-pwa/">ホーム</button>
   <button class="nav active" type="button">Threads</button>
-  <button class="nav" type="button" data-href="/lifehub-pwa/budget.html">家計簿</button>
+  <button class="nav" type="button" id="open-budget">家計簿</button>
 </nav>
 <div id="toast" class="toast"></div>
 
 <script>
 const API='https://script.google.com/macros/s/AKfycbz0w5PVLXCBEXDfdo4aLvwT1vlLmrLMKPkXiRW3ppRd55ANnpOfEQgkLLU7YinTRg0J/exec';
+
+function openExternal(url){
+  if(!url)return;
+  const a=document.createElement('a');
+  a.href=url;
+  a.target='_blank';
+  a.rel='noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
 let selectedDate=localDate(new Date());
 let callbackSeq=0;
 let toastTimer;
@@ -180,13 +192,13 @@ function createThreadCard(post){
 
   let productUrl='';
   try{
-    const candidate=post.affiliate||post.url||'';
+    const candidate=post.url||'';
     const u=new URL(candidate);
     if(u.protocol==='https:')productUrl=u.href;
   }catch(e){}
 
-  const view=button('商品を見る',!productUrl);
-  if(productUrl)view.onclick=()=>window.open(productUrl,'_blank','noopener,noreferrer');
+  const view=button('Safariで商品を見る',!productUrl);
+  if(productUrl)view.onclick=()=>openExternal(productUrl);
   const b1=button('本文コピー',!post.body);if(post.body)b1.onclick=()=>copyText(post.body);
   const b2=button('返信コピー',!post.reply);if(post.reply)b2.onclick=()=>copyText(post.reply);
   const link=post.affiliate||post.url||'';const b3=button('リンクコピー',!link);if(link)b3.onclick=()=>copyText(link);
@@ -219,6 +231,7 @@ document.getElementById('refresh').onclick=loadThreads;
 document.getElementById('previous-date').onclick=()=>changeDate(-1);
 document.getElementById('next-date').onclick=()=>changeDate(1);
 document.querySelectorAll('[data-href]').forEach(b=>b.onclick=()=>location.href=b.dataset.href);
+document.getElementById('open-budget').onclick=()=>openExternal(API+'?page=budget');
 loadThreads();
 </script>
 </body>
