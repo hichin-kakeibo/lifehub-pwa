@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="utf-8">
@@ -8,304 +8,792 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Life Hub">
   <title>Life Hub</title>
-  <link rel="manifest" href="/lifehub-pwa/manifest.webmanifest">
-  <link rel="apple-touch-icon" href="/lifehub-pwa/apple-touch-icon.png">
-  <style>
-    :root{
-      --primary:#D8AAA5;
-      --primary-strong:#9F7470;
-      --primary-soft:rgba(216,170,165,.16);
-      --background:#FAF8F7;
-      --card:#FFFFFF;
-      --text:#3F3836;
-      --muted:#998B87;
-      --danger:#A06561;
-      --danger-soft:#F7ECEA;
-      --border:rgba(153,139,135,.14);
-      --shadow:0 12px 36px rgba(63,56,54,.055);
-      --radius:22px;
-      --safe-top:env(safe-area-inset-top,0px);
-      --safe-bottom:env(safe-area-inset-bottom,0px);
-    }
-    *{box-sizing:border-box}
-    html,body{
-      margin:0;
-      min-height:100%;
-      background:var(--background);
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Hiragino Sans","Yu Gothic",sans-serif;
-    }
-    body{
-      min-height:100svh;
-      padding:calc(16px + var(--safe-top)) 16px calc(28px + var(--safe-bottom));
-    }
-    button{font:inherit}
-    .shell{width:min(100%,720px);margin:0 auto}
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:18px;
-    }
-    .brand{display:flex;align-items:center;gap:10px}
-    .brand img{
-      width:42px;
-      height:42px;
-      border-radius:13px;
-      box-shadow:var(--shadow);
-    }
-    .brand strong{display:block;font-size:17px}
-    .brand small{display:block;color:var(--muted);margin-top:2px}
-    .refresh{
-      border:0;
-      background:var(--primary-soft);
-      color:var(--primary-strong);
-      font-weight:700;
-      border-radius:999px;
-      padding:8px 12px;
-    }
-    .welcome{
-      background:linear-gradient(145deg,#fff,#F8F2EF);
-      border:1px solid var(--border);
-      border-radius:28px;
-      padding:22px;
-      box-shadow:var(--shadow);
-      margin-bottom:24px;
-    }
-    .eyebrow{
-      margin:0 0 8px;
-      color:var(--primary-strong);
-      font-weight:700;
-      font-size:11px;
-      letter-spacing:.12em;
-    }
-    h1{font-size:27px;line-height:1.2;margin:0 0 8px}
-    .welcome p:last-child{margin:0;color:var(--muted);font-size:14px}
-    .heading{
-      display:flex;
-      justify-content:space-between;
-      align-items:end;
-      margin:20px 2px 10px;
-    }
-    .heading h2{margin:0;font-size:18px}
-    .heading span{font-size:11px;color:var(--muted)}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:16px;
-      box-shadow:var(--shadow);
-      min-height:122px;
-    }
-    .card.pressable{
-      cursor:pointer;
-      transition:transform .14s ease, box-shadow .14s ease;
-    }
-    .card.pressable:active{transform:scale(.985)}
-    .label{font-size:12px;color:var(--muted);display:block;margin-bottom:14px}
-    .value{font-size:23px;font-weight:750;letter-spacing:-.03em;display:block}
-    .detail{font-size:11px;color:var(--muted);display:block;margin-top:7px;line-height:1.4}
-    .card.danger{background:var(--danger-soft)}
-    .card.danger .value{color:var(--danger)}
-    .fp{min-height:auto}
-    .fp .value{font-size:18px}
-    .fp p{margin:8px 0 0;color:var(--muted);font-size:12px;line-height:1.7}
-    .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .tool{
-      background:#fff;
-      cursor:pointer;
-      transition:transform .14s ease;
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:15px 10px;
-      text-align:center;
-      box-shadow:var(--shadow);
-    }
-    .tool:active{transform:scale(.985)}
-    .tool strong{display:block;font-size:13px;margin-top:8px}
 
-    .shortcuts{
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:8px;
-      margin:4px 0 22px;
+  <link rel="manifest" href="/lifehub-pwa/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/lifehub-pwa/apple-touch-icon.png?v=2">
+
+  <style>
+    :root {
+      --primary: #D8AAA5;
+      --primary-strong: #9F7470;
+      --primary-soft: rgba(216, 170, 165, .16);
+      --primary-pale: #F6EFEB;
+      --background: #FAF8F7;
+      --card: #FFFFFF;
+      --card-strong: #FFFFFF;
+      --text: #3F3836;
+      --text-muted: #998B87;
+      --border: rgba(153, 139, 135, .14);
+      --success: #6E8174;
+      --success-soft: #EEF3EF;
+      --warning: #98765E;
+      --warning-soft: #F5EEE8;
+      --danger: #A06561;
+      --danger-soft: #F7ECEA;
+      --on-primary: #FFFFFF;
+      --navigation-background: rgba(255, 255, 255, .97);
+      --navigation-border: rgba(153, 139, 135, .14);
+      --navigation-shadow: rgba(63, 56, 54, .035);
+      --shadow-card: 0 12px 36px rgba(63, 56, 54, .055);
+      --radius-card: 22px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
-    .shortcut{
-      border:1px solid var(--border);
-      background:#fff;
-      border-radius:17px;
-      padding:12px 6px 10px;
-      box-shadow:var(--shadow);
-      color:var(--text);
-      text-align:center;
-      cursor:pointer;
-      transition:transform .14s ease;
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
-    .shortcut:active{transform:scale(.97)}
-    .shortcut-icon{
-      display:block;
-      font-size:20px;
-      line-height:1;
-      margin-bottom:7px;
+
+    html, body {
+      min-height: 100%;
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", "Yu Gothic", sans-serif;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
-    .shortcut-label{
-      display:block;
-      font-size:10px;
-      font-weight:700;
-      white-space:nowrap;
+
+    body { overscroll-behavior-y: none; }
+    button, a { font: inherit; color: inherit; }
+    button { color: inherit; }
+    b, strong { font-weight: 600; }
+    [hidden] { display: none !important; }
+
+    .app-shell {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding-bottom: calc(92px + var(--safe-bottom));
+      background: var(--background);
     }
-    .tool small{display:block;color:var(--muted);font-size:10px;margin-top:4px;line-height:1.4}
-    .state{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:18px;
-      box-shadow:var(--shadow);
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.7;
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 18px 32px;
     }
-    .hidden{display:none!important}
-    .boot{
-      position:fixed;
-      inset:0;
-      z-index:999;
-      display:grid;
-      place-items:center;
-      background:var(--background);
-      transition:opacity .2s ease;
+
+    .eyebrow {
+      margin: 0;
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
     }
-    .boot.hidden{opacity:0;pointer-events:none}
-    .boot-inner{text-align:center}
-    .boot-mark{
-      width:58px;
-      height:58px;
-      margin:0 auto 13px;
-      border-radius:18px;
-      background:#fff;
-      display:grid;
-      place-items:center;
-      font-weight:800;
-      box-shadow:var(--shadow);
+
+    .summary-label {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
     }
-    .boot-title{font-weight:700}
-    .boot-sub{font-size:11px;color:var(--muted);margin-top:5px}
-    @media(max-width:390px){
-      .tools{grid-template-columns:1fr}
-      .grid{gap:10px}
-      .card{padding:14px}
-      .shortcuts{grid-template-columns:repeat(5,1fr);gap:6px}
-      .shortcut{padding:10px 3px 9px}
-      .shortcut-label{font-size:9px}
+
+    .pressable {
+      cursor: pointer;
+      transition: transform .15s ease, filter .15s ease;
+    }
+
+    .pressable:active {
+      transform: scale(.98);
+      filter: brightness(.985);
+    }
+
+    .icon-library {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .ui-icon {
+      display: block;
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.65;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: calc(22px + var(--safe-top)) 18px 18px;
+      background: var(--background);
+    }
+
+    .header-title {
+      min-width: 0;
+      flex: 1;
+      text-align: left;
+    }
+
+    .header-title h1 {
+      overflow: hidden;
+      margin: 7px 0 0;
+      font-size: 25px;
+      font-weight: 650;
+      line-height: 1.16;
+      letter-spacing: -.045em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .header-period {
+      min-height: 1em;
+      margin: 7px 0 0;
+      color: var(--text-muted);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .header-action {
+      display: grid;
+      place-items: center;
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .90);
+      box-shadow: 0 7px 22px rgba(63, 56, 54, .04);
+      color: var(--primary-strong);
+      text-decoration: none;
+    }
+
+    .header-action .ui-icon {
+      width: 19px;
+      height: 19px;
+    }
+
+    .home-header-spacer {
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+    }
+
+    .bottom-navigation {
+      position: fixed;
+      z-index: 30;
+      left: 50%;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      width: min(430px, 100%);
+      height: calc(76px + var(--safe-bottom));
+      padding: 0 0 var(--safe-bottom);
+      transform: translateX(-50%);
+      border-top: 1px solid var(--navigation-border);
+      background: var(--navigation-background);
+      box-shadow: 0 -7px 24px var(--navigation-shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .navigation-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      border: 0;
+      background: transparent;
+      color: #A09490;
+      text-decoration: none;
+    }
+
+    .navigation-item .ui-icon {
+      width: 21px;
+      height: 21px;
+    }
+
+    .navigation-item small {
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .navigation-item.is-active {
+      color: var(--primary-strong);
+    }
+
+    .navigation-item.is-active .ui-icon {
+      stroke-width: 2;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 18px 3px 10px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+    }
+
+    .section-note {
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+
+    .live-badge {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: var(--warning-soft);
+      color: var(--warning);
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .home-page { gap: 12px; }
+
+    .welcome-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 136px;
+      padding: 20px 19px;
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: var(--radius-card);
+      background: var(--card);
+      box-shadow: var(--shadow-card);
+    }
+
+    .welcome-copy { min-width: 0; }
+
+    .welcome-card h2 {
+      margin: 10px 0 7px;
+      font-size: 25px;
+      font-weight: 650;
+      line-height: 1.15;
+      letter-spacing: -.045em;
+    }
+
+    .welcome-card p:last-child {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .welcome-mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      border-radius: 14px;
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+    }
+
+    .welcome-mark .ui-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .home-section-heading { margin-top: 8px; }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .summary-card {
+      display: flex;
+      min-width: 0;
+      min-height: 132px;
+      padding: 17px 15px;
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: var(--radius-card);
+      background: var(--card);
+      box-shadow: var(--shadow-card);
+      color: inherit;
+      flex-direction: column;
+      text-decoration: none;
+    }
+
+    .summary-card__top {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .summary-icon {
+      display: grid;
+      place-items: center;
+      width: 31px;
+      height: 31px;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+    }
+
+    .summary-icon .ui-icon {
+      width: 17px;
+      height: 17px;
+    }
+
+    .summary-card strong {
+      margin: 17px 0 6px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -.04em;
+    }
+
+    .summary-card small {
+      display: block;
+      color: var(--text-muted);
+      font-size: 9px;
+      line-height: 1.5;
+      white-space: normal;
+    }
+
+    .summary-card.is-over-budget .summary-icon {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .summary-card.is-over-budget strong {
+      color: var(--danger);
+    }
+
+    .character-card {
+      position: relative;
+      overflow: hidden;
+      padding: 18px;
+      border-radius: var(--radius-card);
+      background: #F8F3EF;
+      border: 1px solid rgba(152,118,94,.10);
+      box-shadow: none;
+      color: var(--text);
+    }
+
+    .character-card h3 {
+      margin: 0 0 7px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .character-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .character-title .ui-icon {
+      width: 17px;
+      height: 17px;
+      color: var(--warning);
+    }
+
+    .character-card p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .fp-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 17px;
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: var(--radius-card);
+      background: var(--card);
+      box-shadow: var(--shadow-card);
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .fp-status-icon {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+    }
+
+    .fp-status-icon .ui-icon {
+      width: 19px;
+      height: 19px;
+    }
+
+    .fp-card-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .fp-card-content strong {
+      display: block;
+      margin: 5px 0 4px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+    }
+
+    .fp-card-content p {
+      display: -webkit-box;
+      overflow: hidden;
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 10px;
+      line-height: 1.55;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .fp-chevron {
+      color: var(--text-muted);
+    }
+
+    .fp-chevron .ui-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    .future-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .future-card {
+      appearance: none;
+      width: 100%;
+      margin: 0;
+      padding: 13px 8px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: #FCF9F7;
+      color: inherit;
+      font: inherit;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .future-card span {
+      display: grid;
+      place-items: center;
+    }
+
+    .future-icon {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 8px;
+      border-radius: 11px;
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+    }
+
+    .future-icon .ui-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    .future-card strong {
+      display: block;
+      margin: 6px 0 3px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .future-card small {
+      display: block;
+      color: var(--text-muted);
+      font-size: 8px;
+      line-height: 1.45;
+    }
+
+    .future-card.is-active {
+      border-color: rgba(159,116,112,.16);
+      background: var(--card);
+      box-shadow: var(--shadow-card);
+    }
+
+    .future-card.is-active small {
+      color: var(--primary-strong);
+      font-weight: 600;
+    }
+
+    .loading-card, .error-card {
+      padding: 38px 20px;
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: var(--radius-card);
+      background: var(--card);
+      box-shadow: var(--shadow-card);
+      color: var(--text-muted);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      border: 3px solid #EADFD9;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #lifehub-boot {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: grid;
+      place-items: center;
+      background: #FAF8F7;
+      transition: opacity .22s ease;
+    }
+
+    #lifehub-boot.is-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .lifehub-boot-card {
+      text-align: center;
+      color: #3F3836;
+    }
+
+    .lifehub-boot-mark {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.04em;
+      box-shadow: 0 14px 40px rgba(63, 56, 54, .08);
+    }
+
+    .lifehub-boot-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .lifehub-boot-sub {
+      margin-top: 7px;
+      font-size: 11px;
+      color: #998B87;
+    }
+
+    @media (max-width: 360px) {
+      .summary-grid { grid-template-columns: 1fr; }
+      .future-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div id="boot" class="boot">
-    <div class="boot-inner">
-      <div class="boot-mark">LH</div>
-      <div class="boot-title">Life Hub</div>
-      <div class="boot-sub">暮らしを読み込んでいます</div>
+  <div id="lifehub-boot" aria-hidden="true">
+    <div class="lifehub-boot-card">
+      <div class="lifehub-boot-mark">LH</div>
+      <div class="lifehub-boot-title">Life Hub</div>
+      <div class="lifehub-boot-sub">暮らしを読み込んでいます</div>
     </div>
   </div>
 
-  <div class="shell">
-    <header>
-      <div class="brand">
-        <img src="/lifehub-pwa/apple-touch-icon.png" alt="">
-        <div>
-          <strong>Life Hub</strong>
-          <small>今日の暮らし</small>
-        </div>
+  <svg class="icon-library" aria-hidden="true">
+    <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3.5 10.5 12 3l8.5 7.5v9a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M9 21v-7h6v7"/></symbol>
+    <symbol id="icon-threads" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 13c.8-3 6.6-3 7.4-.1.7 2.6-2.4 4.5-4.8 3.5-2.1-.9-1.6-3.7.7-4.1 3.1-.6 5.8.9 6.7 3.4"/></symbol>
+    <symbol id="icon-wallet" viewBox="0 0 24 24"><path d="M4 6.5h15a1.5 1.5 0 0 1 1.5 1.5v11A1.5 1.5 0 0 1 19 20.5H5A2.5 2.5 0 0 1 2.5 18V6A2.5 2.5 0 0 1 5 3.5h12"/><path d="M16 11h4.5v5H16a2.5 2.5 0 0 1 0-5Z"/></symbol>
+    <symbol id="icon-receipt" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.5-2 1.5-2-1.5-2 1.5L8 19l-2 1.5z"/><path d="M9 8h6m-6 4h6m-6 4h3"/></symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="icon-chevron-right" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M19 12a7 7 0 1 1-2.1-5"/></symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/><path d="M2.5 20.5h19"/></symbol>
+    <symbol id="icon-leaf" viewBox="0 0 24 24"><path d="M19.5 4.5C12 4.5 6 8 6 14.5c0 3 2 5 5 5 6.5 0 8.5-7.5 8.5-15Z"/><path d="M4 21c2.5-5.5 6.5-9.5 12-12"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+    <symbol id="icon-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></symbol>
+    <symbol id="icon-package" viewBox="0 0 24 24"><path d="m4 7 8-4 8 4-8 4zM4 7v10l8 4 8-4V7M12 11v10"/><path d="m8 5 8 4"/></symbol>
+    <symbol id="icon-flame" viewBox="0 0 24 24"><path d="M13.5 3.5c.8 3.8-2.5 4.6-2.5 7.3 0 1.2.8 2 1.8 2.4-.2-1.8 1-3.1 2.5-4.2 1.8 1.8 3.2 4.1 3.2 6.6A6.4 6.4 0 0 1 12 22a6.5 6.5 0 0 1-6.5-6.4c0-4.3 3.2-7.5 8-12.1Z"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <span class="home-header-spacer" aria-hidden="true"></span>
+
+      <div class="header-title">
+        <p class="eyebrow">LIFE HUB</p>
+        <h1>Life Hub</h1>
+        <p class="header-period">今日の暮らし</p>
       </div>
-      <button class="refresh" id="refresh" type="button">更新</button>
+
+      <button class="header-action pressable" id="header-refresh" type="button" aria-label="最新情報に更新">
+        <svg class="ui-icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+      </button>
     </header>
 
-    <div id="loading" class="state">Life Hubのデータを読み込んでいます…</div>
-    <div id="error" class="state hidden"></div>
+    <main class="main-content home-page">
+      <section class="welcome-card" aria-labelledby="greeting">
+        <div class="welcome-copy">
+          <p class="eyebrow" id="home-date">LIFE HUB</p>
+          <h2 id="greeting">読み込み中...</h2>
+          <p>今日やることを、ここから。</p>
+        </div>
 
-    <main id="content" class="hidden">
-      <section class="welcome">
-        <p class="eyebrow" id="date">LIFE HUB</p>
-        <h1 id="greeting">こんにちは</h1>
-        <p>今日やることを、ここから。</p>
+        <span class="welcome-mark" aria-hidden="true">
+          <svg class="ui-icon"><use href="#icon-leaf"></use></svg>
+        </span>
       </section>
 
-      <section class="shortcuts" aria-label="Life Hub メニュー">
-        <button class="shortcut" type="button" id="shortcut-threads">
-          <span class="shortcut-icon">◉</span>
-          <span class="shortcut-label">Threads</span>
-        </button>
-        <button class="shortcut" type="button" id="shortcut-budget">
-          <span class="shortcut-icon">¥</span>
-          <span class="shortcut-label">家計簿</span>
-        </button>
-        <button class="shortcut" type="button" id="shortcut-fp">
-          <span class="shortcut-icon">＋</span>
-          <span class="shortcut-label">FP</span>
-        </button>
-        <button class="shortcut" type="button" id="shortcut-shopping">
-          <span class="shortcut-icon">🛒</span>
-          <span class="shortcut-label">買い物</span>
-        </button>
-        <button class="shortcut" type="button" id="shortcut-todo">
-          <span class="shortcut-icon">✓</span>
-          <span class="shortcut-label">Todo</span>
-        </button>
-      </section>
-
-      <div class="heading">
+      <div class="section-heading home-section-heading">
         <h2>今日</h2>
-        <span>暮らしの現在地</span>
+        <span class="section-note">暮らしの現在地</span>
       </div>
 
-      <section class="grid">
-        <article class="card pressable" id="threads-card" role="link" tabindex="0">
-          <span class="label">今日の投稿</span>
-          <strong class="value" id="threads">—</strong>
-          <small class="detail" id="threads-detail">—</small>
-        </article>
+      <section class="summary-grid" aria-label="今日の概要">
+        <a class="summary-card pressable" href="/lifehub-pwa/threads.html">
+          <span class="summary-card__top">
+            <span class="summary-icon">
+              <svg class="ui-icon"><use href="#icon-threads"></use></svg>
+            </span>
+            <span class="summary-label">今日の投稿</span>
+          </span>
 
-        <article class="card pressable" id="budget-card" role="link" tabindex="0">
-          <span class="label" id="budget-label">今月の予算</span>
-          <strong class="value" id="budget">—</strong>
-          <small class="detail" id="budget-detail">—</small>
-        </article>
+          <strong id="home-post-count">—</strong>
+          <small id="home-post-detail">確認中</small>
+        </a>
+
+        <a class="summary-card pressable" id="home-budget-card" href="#" data-external="?page=budget">
+          <span class="summary-card__top">
+            <span class="summary-icon">
+              <svg class="ui-icon"><use href="#icon-wallet"></use></svg>
+            </span>
+            <span class="summary-label" id="home-budget-label">今月の予算</span>
+          </span>
+
+          <strong id="home-budget">—</strong>
+          <small id="home-today-budget">確認中</small>
+        </a>
       </section>
 
-      <div class="heading">
-        <h2>お金</h2>
-        <span>HICHI FP＋</span>
-      </div>
+      <section id="home-character-section" hidden>
+        <div class="section-heading">
+          <h2>キャラ速報</h2>
+          <span class="live-badge">NEW</span>
+        </div>
 
-      <section class="card fp pressable" id="fp-card" role="link" tabindex="0">
-        <span class="label">FPステータス</span>
-        <strong class="value" id="fp-status">—</strong>
-        <p id="fp-comment">—</p>
+        <article class="character-card pressable" id="home-character-card"></article>
       </section>
 
-      <div class="heading">
-        <h2>便利ツール</h2>
-        <span>Life Hub</span>
-      </div>
+      <section>
+        <div class="section-heading">
+          <h2>お金</h2>
+          <span class="section-note">HICHI FP＋</span>
+        </div>
 
-      <section class="tools" id="tools"></section>
+        <a
+          class="fp-card pressable fp-link-card"
+          href="#"
+          data-url="https://script.google.com/macros/s/AKfycbzqVn_XCdqtbGMrfYdqVAkdJXVKi08fIaz8EHbvg3cfu5qFdokVfa8FyLEzzDwKdwPk3g/exec"
+        >
+          <div class="fp-status-icon" id="home-fp-icon">
+            <svg class="ui-icon"><use href="#icon-circle"></use></svg>
+          </div>
+
+          <div class="fp-card-content">
+            <span class="summary-label">FPステータス</span>
+            <strong id="home-fp-status">確認中</strong>
+            <p id="home-fp-comment">ひちFP＋を確認します。</p>
+          </div>
+
+          <span class="fp-chevron">
+            <svg class="ui-icon"><use href="#icon-chevron-right"></use></svg>
+          </span>
+        </a>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <h2>便利ツール</h2>
+          <span class="section-note">Life Hub</span>
+        </div>
+
+        <div class="future-grid" id="home-future-modules">
+          <div class="loading-card">
+            <span class="spinner"></span>
+            <p>読み込んでいます</p>
+          </div>
+        </div>
+      </section>
     </main>
+
+    <nav class="bottom-navigation" aria-label="メインナビゲーション">
+      <a class="navigation-item pressable is-active" href="/lifehub-pwa/">
+        <svg class="ui-icon" aria-hidden="true"><use href="#icon-home"></use></svg>
+        <small>HOME</small>
+      </a>
+
+      <a class="navigation-item pressable" href="/lifehub-pwa/threads.html">
+        <svg class="ui-icon" aria-hidden="true"><use href="#icon-threads"></use></svg>
+        <small>Threads</small>
+      </a>
+
+      <a class="navigation-item pressable" href="#" data-external="?page=budget">
+        <svg class="ui-icon" aria-hidden="true"><use href="#icon-wallet"></use></svg>
+        <small>家計簿</small>
+      </a>
+
+      <a
+        class="navigation-item pressable"
+        href="#"
+        data-url="https://script.google.com/macros/s/AKfycbzqVn_XCdqtbGMrfYdqVAkdJXVKi08fIaz8EHbvg3cfu5qFdokVfa8FyLEzzDwKdwPk3g/exec"
+      >
+        <svg class="ui-icon" aria-hidden="true"><use href="#icon-chart"></use></svg>
+        <small>FP</small>
+      </a>
+    </nav>
   </div>
 
   <script>
-    const API = 'https://script.google.com/macros/s/AKfycbz0w5PVLXCBEXDfdo4aLvwT1vlLmrLMKPkXiRW3ppRd55ANnpOfEQgkLLU7YinTRg0J/exec';
-    const fmt = n => Math.round(Number(n) || 0).toLocaleString('ja-JP') + '円';
-    const GAS_APP = API;
+    const GAS_APP = 'https://script.google.com/macros/s/AKfycbz0w5PVLXCBEXDfdo4aLvwT1vlLmrLMKPkXiRW3ppRd55ANnpOfEQgkLLU7YinTRg0J/exec';
     let timeoutId = null;
 
-    function toGasUrl(href) {
-      const value = String(href || '').trim();
-      if (!value) return '';
-      if (/^https?:\/\//i.test(value)) return value;
-      if (value.startsWith('?')) return GAS_APP + value;
-      return GAS_APP + (value.startsWith('/') ? value : '?' + value);
+    function fmtYen(value) {
+      return Math.round(Number(value) || 0).toLocaleString('ja-JP') + '円';
+    }
+
+    function gasUrl(value) {
+      const href = String(value || '').trim();
+      if (!href) return '';
+      if (/^https?:\/\//i.test(href)) return href;
+      if (href.startsWith('?')) return GAS_APP + href;
+      return GAS_APP + '?' + href;
     }
 
     function openExternal(url) {
@@ -320,179 +808,180 @@
     }
 
     function finishBoot() {
-      const boot = document.getElementById('boot');
+      const boot = document.getElementById('lifehub-boot');
       if (!boot) return;
-      boot.classList.add('hidden');
+      boot.classList.add('is-hidden');
       setTimeout(() => boot.remove(), 250);
     }
 
-    function showError(message) {
-      clearTimeout(timeoutId);
-      document.getElementById('loading').classList.add('hidden');
-      document.getElementById('content').classList.add('hidden');
-      const el = document.getElementById('error');
-      el.textContent = '接続できませんでした：' + message;
-      el.classList.remove('hidden');
-      finishBoot();
+    function iconName(name) {
+      if (name === 'receipt') return 'receipt';
+      if (name === 'cart') return 'package';
+      if (name === 'checklist') return 'check';
+      return 'circle';
+    }
+
+    function renderCharacter(post) {
+      const section = document.getElementById('home-character-section');
+      const card = document.getElementById('home-character-card');
+      section.hidden = !post;
+      card.replaceChildren();
+
+      if (!post) return;
+
+      const title = document.createElement('h3');
+      title.className = 'character-title';
+      title.innerHTML = '<svg class="ui-icon"><use href="#icon-flame"></use></svg><span></span>';
+      title.querySelector('span').textContent = post.title || 'キャラ速報';
+
+      const body = document.createElement('p');
+      body.textContent = post.body || '';
+
+      card.append(title, body);
+    }
+
+    function renderFutureModules(modules) {
+      const area = document.getElementById('home-future-modules');
+      area.replaceChildren();
+
+      (modules || []).forEach(module => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'future-card pressable is-active';
+
+        const iconWrap = document.createElement('span');
+        iconWrap.className = 'future-icon';
+        iconWrap.innerHTML = '<svg class="ui-icon"><use href="#icon-' + iconName(module.icon) + '"></use></svg>';
+
+        const title = document.createElement('strong');
+        title.textContent = module.title || '';
+
+        const sub = document.createElement('small');
+        sub.textContent = module.subtitle || '';
+
+        card.append(iconWrap, title, sub);
+
+        const url = gasUrl(module.href);
+        if (url) card.addEventListener('click', () => openExternal(url));
+
+        area.appendChild(card);
+      });
     }
 
     function renderHome(response) {
-      try {
-        clearTimeout(timeoutId);
+      clearTimeout(timeoutId);
 
-        if (!response || !response.ok) {
-          throw new Error(response && response.error ? response.error.message : 'データを取得できませんでした。');
-        }
-
-        const d = response.data || {};
-
-        document.getElementById('date').textContent = (d.displayDate || '') + ' · LIFE HUB';
-        document.getElementById('greeting').textContent = d.greeting || 'こんにちは';
-
-        const th = d.threads || {};
-        document.getElementById('threads').textContent = (th.total ?? 0) + '件';
-        document.getElementById('threads-detail').textContent =
-          '準備OK ' + (th.ready ?? 0) + '件 · 投稿済み ' + (th.posted ?? 0) + '件';
-
-        const b = d.budget || {};
-        const remaining = b.remaining == null ? null : Number(b.remaining);
-        const today = b.today == null ? null : Number(b.today);
-        const bcard = document.getElementById('budget-card');
-        bcard.classList.remove('danger');
-
-        if (remaining == null || !Number.isFinite(remaining)) {
-          document.getElementById('budget-label').textContent = '今月の予算';
-          document.getElementById('budget').textContent = '—';
-          document.getElementById('budget-detail').textContent = '家計簿を確認';
-        } else if (remaining < 0) {
-          document.getElementById('budget-label').textContent = '予算オーバー';
-          document.getElementById('budget').textContent = fmt(Math.abs(remaining));
-          document.getElementById('budget-detail').textContent = '今月の支出を確認';
-          bcard.classList.add('danger');
-        } else {
-          document.getElementById('budget-label').textContent = 'あと使える';
-          document.getElementById('budget').textContent = fmt(remaining);
-          document.getElementById('budget-detail').textContent =
-            today != null && Number.isFinite(today) && today >= 0
-              ? '今日の目安 ' + fmt(today)
-              : '家計簿を確認';
-        }
-
-        const fp = d.fp || {};
-        document.getElementById('fp-status').textContent = fp.status || '—';
-        document.getElementById('fp-comment').textContent = fp.comment || '—';
-
-        const tools = document.getElementById('tools');
-        tools.replaceChildren();
-
-        (d.upcomingModules || []).forEach(m => {
-          const item = document.createElement('div');
-          item.className = 'tool';
-
-          const icon = document.createElement('div');
-          icon.style.fontSize = '22px';
-          icon.textContent = ({receipt:'🧾',cart:'🛒',checklist:'✓'}[m.icon] || '•');
-
-          const title = document.createElement('strong');
-          title.textContent = m.title || '';
-
-          const subtitle = document.createElement('small');
-          subtitle.textContent = m.subtitle || '';
-
-          item.append(icon, title, subtitle);
-
-          const href = toGasUrl(m.href);
-          if (href) {
-            item.setAttribute('role', 'link');
-            item.tabIndex = 0;
-            item.addEventListener('click', () => openExternal(href));
-            item.addEventListener('keydown', event => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                openExternal(href);
-              }
-            });
-          }
-
-          tools.appendChild(item);
-        });
-
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('error').classList.add('hidden');
-        document.getElementById('content').classList.remove('hidden');
-
+      if (!response || !response.ok) {
+        document.getElementById('home-future-modules').innerHTML =
+          '<div class="error-card">データを取得できませんでした。</div>';
         finishBoot();
-      } catch (e) {
-        showError(e.message || String(e));
+        return;
       }
+
+      const data = response.data || {};
+
+      document.getElementById('home-date').textContent =
+        data.displayDate ? data.displayDate + ' · LIFE HUB' : 'LIFE HUB';
+
+      document.getElementById('greeting').textContent =
+        data.greeting || 'こんにちは';
+
+      const threads = data.threads || {};
+      document.getElementById('home-post-count').textContent =
+        (threads.total ?? 0) + '件';
+
+      document.getElementById('home-post-detail').textContent =
+        '準備OK ' + (threads.ready ?? 0) + '件・投稿済み ' + (threads.posted ?? 0) + '件';
+
+      const budget = data.budget || {};
+      const remaining = budget.remaining == null ? null : Number(budget.remaining);
+      const today = budget.today == null ? null : Number(budget.today);
+      const budgetCard = document.getElementById('home-budget-card');
+
+      budgetCard.classList.remove('is-over-budget');
+
+      if (remaining == null || !Number.isFinite(remaining)) {
+        document.getElementById('home-budget-label').textContent = '今月の予算';
+        document.getElementById('home-budget').textContent = '—';
+        document.getElementById('home-today-budget').textContent = '家計簿を確認';
+      } else if (remaining < 0) {
+        budgetCard.classList.add('is-over-budget');
+        document.getElementById('home-budget-label').textContent = '予算オーバー';
+        document.getElementById('home-budget').textContent = fmtYen(Math.abs(remaining));
+        document.getElementById('home-today-budget').textContent =
+          Number.isFinite(today) ? '今日の目安 ' + fmtYen(today) : '家計簿を確認';
+      } else {
+        document.getElementById('home-budget-label').textContent = 'あと使える';
+        document.getElementById('home-budget').textContent = fmtYen(remaining);
+        document.getElementById('home-today-budget').textContent =
+          Number.isFinite(today) ? '今日の目安 ' + fmtYen(today) : '家計簿を確認';
+      }
+
+      const fp = data.fp || {};
+      document.getElementById('home-fp-status').textContent =
+        fp.status || '確認中';
+      document.getElementById('home-fp-comment').textContent =
+        fp.comment || 'ひちFP＋を確認します。';
+
+      renderCharacter(data.characterPost);
+      renderFutureModules(data.upcomingModules);
+
+      finishBoot();
     }
 
     window.lifeHubHomeCallback = renderHome;
 
     function loadHome() {
-      document.getElementById('error').classList.add('hidden');
-      document.getElementById('loading').classList.remove('hidden');
-      document.getElementById('content').classList.add('hidden');
-
-      const old = document.getElementById('lifehub-api-script');
+      const old = document.getElementById('lifehub-home-api');
       if (old) old.remove();
 
-      const s = document.createElement('script');
-      s.id = 'lifehub-api-script';
-      s.src = API + '?api=v1/home/dashboard&callback=lifeHubHomeCallback&_=' + Date.now();
-      s.onerror = () => showError('GAS APIの読み込みに失敗しました。');
-      document.head.appendChild(s);
+      const script = document.createElement('script');
+      script.id = 'lifehub-home-api';
+      script.src =
+        GAS_APP +
+        '?api=v1/home/dashboard&callback=lifeHubHomeCallback&_=' +
+        Date.now();
+
+      script.onerror = () => {
+        clearTimeout(timeoutId);
+        document.getElementById('home-future-modules').innerHTML =
+          '<div class="error-card">Life Hubを読み込めませんでした。</div>';
+        finishBoot();
+      };
+
+      document.head.appendChild(script);
 
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => showError('タイムアウトしました。'), 10000);
+      timeoutId = setTimeout(() => {
+        document.getElementById('home-future-modules').innerHTML =
+          '<div class="error-card">読み込みに時間がかかっています。</div>';
+        finishBoot();
+      }, 10000);
     }
 
-    document.getElementById('refresh').addEventListener('click', loadHome);
+    document.getElementById('header-refresh').addEventListener('click', loadHome);
 
-    const threadsCard = document.getElementById('threads-card');
-    const budgetCard = document.getElementById('budget-card');
-    const fpCard = document.getElementById('fp-card');
-
-    const openThreads = () => {
-      window.location.href = '/lifehub-pwa/threads.html';
-    };
-    const openBudget = () => openExternal(GAS_APP + '?page=budget');
-    const openFp = () => openExternal(GAS_APP + '?page=fp');
-    threadsCard.addEventListener('click', openThreads);
-    threadsCard.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') {
+    document.querySelectorAll('[data-external]').forEach(link => {
+      link.addEventListener('click', event => {
         event.preventDefault();
-        openThreads();
-      }
+        openExternal(gasUrl(link.dataset.external));
+      });
     });
 
-    document.getElementById('shortcut-threads').addEventListener('click', openThreads);
-    document.getElementById('shortcut-budget').addEventListener('click', openBudget);
-    document.getElementById('shortcut-fp').addEventListener('click', openFp);
-    document.getElementById('shortcut-shopping').addEventListener('click', () => openExternal(GAS_APP + '?page=shopping'));
-    document.getElementById('shortcut-todo').addEventListener('click', () => openExternal(GAS_APP + '?page=todo'));
-
-    budgetCard.addEventListener('click', openBudget);
-    budgetCard.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') {
+    document.querySelectorAll('[data-url]').forEach(link => {
+      link.addEventListener('click', event => {
         event.preventDefault();
-        openBudget();
-      }
-    });
-
-    fpCard.addEventListener('click', openFp);
-    fpCard.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        openFp();
-      }
+        openExternal(link.dataset.url);
+      });
     });
 
     loadHome();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/lifehub-pwa/sw.js', { scope: '/lifehub-pwa/' }).catch(() => {});
+        navigator.serviceWorker
+          .register('/lifehub-pwa/sw.js', { scope: '/lifehub-pwa/' })
+          .catch(() => {});
       });
     }
   </script>
